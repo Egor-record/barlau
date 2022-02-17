@@ -1,0 +1,10 @@
+Package: autoinstall
+Version: 0.0.2
+Section: misc
+Priority: optional
+Architecture: all
+Installed-Size: 58246
+Maintainer: N/A <nobody@example.com>
+Description: This is a webOS application.
+webOS-Package-Format-Version: 2
+webOS-Packager-Version: x.y.x
