@@ -1,6 +1,7 @@
 package templates
 
 import (
+	"crypto/rand"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -9,54 +10,11 @@ import (
 	"image/png"
 	"io/ioutil"
 	"log"
-	"math/rand"
+	"math/big"
 	"os"
 	"os/exec"
-	"strconv"
 	"sync"
 )
-
-const nativePlayer = `<!DOCTYPE html>
-<html>
-<head>
-<title>Example Web App</title>
-<style>
-    body {
-        width: 100%;
-        height: 100%;
-        background-color:#202020;
-    }
-</style>
-
-</head>
-<body>
-    <div>
-        <video src="{{ . }}" autoplay>
-        </video>
-    </div>
-</body>
-</html>`
-
-const shaka = `<!DOCTYPE html>
-<html>
-<head>
-<title>Example Web App</title>
-<style>
-    body {
-        width: 100%;
-        height: 100%;
-        background-color:#202020;
-    }
-</style>
-
-</head>
-<body>
-    <div>
-        <video src="{{ . }}" autoplay>
-        </video>
-    </div>
-</body>
-</html>`
 
 func generateTemplate(manifest, path string, native bool, wg *sync.WaitGroup) {
 	defer wg.Done()
@@ -86,8 +44,8 @@ func generateTemplate(manifest, path string, native bool, wg *sync.WaitGroup) {
 	f.Close()
 }
 
-func CreateSamplePlayer(manifest string, native bool) int {
-	var path = "backend/cli/app" + strconv.Itoa(rand.Int())
+func CreateSamplePlayer(manifest string, native bool) *big.Int {
+	var path = "backend/cli/app" + randomInt().String()
 	createCopyOfTemplate(path)
 	var wg sync.WaitGroup
 	wg.Add(3)
@@ -95,14 +53,14 @@ func CreateSamplePlayer(manifest string, native bool) int {
 	go generateAppJson(path, &wg)
 	go generatePng(path, &wg)
 	wg.Wait()
-	v := rand.Int()
-	packageIpk(path, v)
+	random := randomInt()
+	packageIpk(path, random)
 	os.RemoveAll(path)
-	return v
+	return random
 }
 
-func packageIpk(path string, rand int) {
-	cmd := exec.Command("ares-package", path, "-o", "frontend/static/ipk"+strconv.Itoa(rand))
+func packageIpk(path string, rand *big.Int) {
+	cmd := exec.Command("ares-package", path, "-o", "frontend/static/ipk"+rand.String())
 	stdout, err := cmd.Output()
 
 	if err != nil {
@@ -158,4 +116,13 @@ func createCopyOfTemplate(path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func randomInt() *big.Int {
+	v, err := rand.Int(rand.Reader, big.NewInt(1000))
+	if err != nil {
+		panic(err)
+	}
+
+	return v
 }

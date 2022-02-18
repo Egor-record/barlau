@@ -64,7 +64,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import navigation from './navigation';
 
 export default {

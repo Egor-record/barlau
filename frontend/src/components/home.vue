@@ -10,7 +10,7 @@
             <div class="item-menu text-white rounded mr-md-5 text-center p-5 bg-blue">
               <router-link class="nav-link" to="/checker">
                 <b-icon-check font-scale="5"></b-icon-check>
-                <h4 class="text-white mt-4">Play your manifest</h4>
+                <h4 class="text-white mt-4">Check manifest</h4>
               </router-link>
             </div>
           </div>
@@ -18,7 +18,7 @@
              <div class="item-menu text-white ml-md-5 rounded text-center p-5 bg-blue">
                <router-link class="nav-link" to="/generator">
                  <b-icon-file-code font-scale="5"></b-icon-file-code>
-                 <h4 class="text-white mt-4">Create new app</h4>
+                 <h4 class="text-white mt-4">Create sample app</h4>
                </router-link>
              </div>
            </div>
